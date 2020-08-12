@@ -22,6 +22,7 @@ class StarWarsContainer extends Component {
       .then(response => response.json())
       .then(data => 
         this.setState(prevState => {
+          console.log("log data from service", data)
           return {
             ...prevState,
             categories: Object.keys(data),
