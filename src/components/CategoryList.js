@@ -18,7 +18,7 @@ export default function CategoryList(props) {
         setItems(data)
     }
 
-    const list = Object.keys(items).map(r=><Link key={r} to={`/category/${r}`} className="myButton"><button>{r}</button></Link>)
+    const list = Object.keys(items).map(r=><Link key={r} to={`/category/${r}`} className="myButton"><button className="btn btn-dark">{r}</button></Link>)
 
     return (
         list.length!==0 ? <div>{list}</div> : <div>No items to display</div>

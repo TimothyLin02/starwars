@@ -47,6 +47,6 @@ tr:nth-child(even) {
 }
 
 .myButton {
-  display: block;
+  display: inline;
   border: 1px;
 }

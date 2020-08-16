@@ -4,8 +4,7 @@ import CategoryList from '../components/CategoryList'
 export default function Home() {
     return (
         <div>
-            <h1>Star Wars</h1>
-            <CategoryList url="https://swapi.dev/api/?format=json"/>
+            <h2>This is Home Page</h2>
         </div>
     )
 }
