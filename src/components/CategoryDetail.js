@@ -1,48 +1,33 @@
-import { useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
 import React from 'react';
+import useStarWarsContext from '../context/useStarWarsContext'
 
 export default function CategoryDetail({ url }) {
-
-    useEffect(() => {
-        retrieveDetails()
-    }, [])
-    
-    const [details, setDetails] = useState([{}])
-    const [count, setCount] = useState()
-    const [next, setNext] = useState()
-    const [prev, setPrev] = useState()
-
-    const retrieveDetails = async () => {
-        console.log("in retrieveDetails")
-        console.log(url)
-        const response = await fetch(url)
-        const data = await response.json() 
-        console.log(data)
-        setDetails(data.results)
-        setNext(data.next)
-        setPrev(data.previous)
-        setCount(data.count)
-        
-        console.log("next: " + next)
-        console.log("prev: " + prev)
+    const { data, setData, retrieveDetails } = useStarWarsContext()
+    console.log("url: "+url)
+    //console.log(data.details)
+    console.log("data.url: "+ data.url)
+    //console.log(data)
+    if (url !== data.url) {
+        setData({...data, url: url})
     }
+    
+    let prevButton = data.details ? 
+        <button onClick={()=>setData({...data, url: data.details.previous})}>previous</button> 
+        : null
+    
+    let nextButton = data.details ? 
+        <button onClick={()=>setData({...data, url: data.details.next})}>next</button> 
+        : null
 
-    const keys = Object.keys(details[0])
-    const headers = keys.map(k => <th>{k}</th>)
-    const body = details.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>)
+    console.log(data.details)
+    const keys = data.details? Object.keys(data.details.results[0]) : null
+    const headers = keys? keys.map(k => <th>{k}</th>) : null
+    const body = keys? data.details.results.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>) : null
 
     return (
         <div>
-            <h3>Count: {count}</h3>
-            <button onClick={()=> {
-                url=prev
-                retrieveDetails()
-            }}>Previous</button>
-            <button onClick={()=> {
-                url=next
-                retrieveDetails()
-            }}>Next</button>
+            <h3>Count: {data.details? data.details.count: null}</h3>
+            <div>{prevButton}{nextButton}</div>
             <table>
                 <thead>
                     <tr>{headers}</tr>

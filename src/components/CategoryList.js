@@ -1,26 +1,27 @@
-import { useEffect, useState } from "react";
-import {Link} from "react-router-dom"
 import React from 'react';
+import {NavLink} from "react-router-dom"
+import useStarWarsContext from '../context/useStarWarsContext'
 
 export default function CategoryList(props) {
+    const { data, setData, retrieveItems} = useStarWarsContext()
     
-    useEffect( () => {
-        retrieveItems();
-    }, [])
-
-    const [items, setItems] = useState({})
-
-    console.log(props)
-    const retrieveItems = async () => {
-        let response = await fetch(props.url)
-        let data = await response.json()
-        console.log(data)
-        setItems(data)
+    if (!data.items) {
+        retrieveItems(props.url)
     }
-
-    const list = Object.keys(items).map(r=><Link key={r} to={`/category/${r}`} className="myButton"><button className="btn btn-dark">{r}</button></Link>)
+    const list = data.items? 
+        Object.keys(data.items).map(r => 
+            <NavLink key={r} to={`/category/${r}`} className="myButton">
+                <button className="btn btn-dark" onClick={()=>setData({...data, url:props.url})}>{r}</button>
+            </NavLink>) 
+        : []
 
     return (
-        list.length!==0 ? <div>{list}</div> : <div>No items to display</div>
+        list.length!==0 ? 
+        <div>
+            <nav className="navbar navbar-dark bg-dark">
+                {list}
+            </nav>
+        </div>
+        : <div>No items to display</div>
     )
 }
