@@ -4,6 +4,7 @@ import {Switch, Route, Link} from 'react-router-dom';
 import Home from './pages/Home';
 import Category from './pages/Category';
 import CategoryList from './components/CategoryList';
+import PageNotFound from './pages/PageNotFound';
 import { StarWarsContextProvider } from './context/StarWarsContext';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Route exact path="/" component={Home}/>
         <Route exact path="/home" component={Home}/>
         <Route path="/category/:name" component={Category}/>
+        <Route component={PageNotFound}/>
       </Switch>
     </StarWarsContextProvider>
   )  
