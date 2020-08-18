@@ -9,16 +9,14 @@ import { StarWarsContextProvider } from './context/StarWarsContext';
 export default function App() {
 
   return (
-    <div>
-      <StarWarsContextProvider>
-        <Link to={`/home`}><h1>Star Wars</h1></Link>
-        <CategoryList url="https://swapi.dev/api/?format=json"/>
-        <Switch>
-          <Route exact path="/" component={Home}/>
-          <Route exact path="/home" component={Home}/>
-          <Route path="/category/:name" component={Category}/>
-        </Switch>
-      </StarWarsContextProvider>
-    </div>
+    <StarWarsContextProvider>
+      <Link to={`/home`}><h1>Star Wars</h1></Link>
+      <CategoryList />
+      <Switch>
+        <Route exact path="/" component={Home}/>
+        <Route exact path="/home" component={Home}/>
+        <Route path="/category/:name" component={Category}/>
+      </Switch>
+    </StarWarsContextProvider>
   )  
 }

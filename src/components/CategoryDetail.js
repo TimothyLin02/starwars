@@ -1,32 +1,34 @@
 import React from 'react';
 import useStarWarsContext from '../context/useStarWarsContext'
 
-export default function CategoryDetail({ url }) {
-    const { data, setData, retrieveDetails } = useStarWarsContext()
-    console.log("url: "+url)
-    //console.log(data.details)
-    console.log("data.url: "+ data.url)
-    //console.log(data)
-    if (url !== data.url) {
-        setData({...data, url: url})
+export default function CategoryDetail({ name }) {
+    const { data, setData, retrieveDetails, categoryPage } = useStarWarsContext()
+    if (Object.keys(data.categories).length > 0) {
+        if (Object.keys(data.details).length === 0) {
+            retrieveDetails(name)
+        }
+        else if (name !== data.category) {
+            setData({...data, category: name, details: {}})
+        }
     }
     
-    let prevButton = data.details ? 
-        <button onClick={()=>setData({...data, url: data.details.previous})}>previous</button> 
-        : null
-    
-    let nextButton = data.details ? 
-        <button onClick={()=>setData({...data, url: data.details.next})}>next</button> 
-        : null
-
-    console.log(data.details)
-    const keys = data.details? Object.keys(data.details.results[0]) : null
-    const headers = keys? keys.map(k => <th>{k}</th>) : null
-    const body = keys? data.details.results.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>) : null
+    let keys = Object.keys(data.details).length !==0? Object.keys(data.details.results[0]) : []
+    let headers = keys.map(k => <th>{k}</th>)
+    console.log("details",data.details)
+    if (keys.length !== 0) {
+        console.log("results",data.details.results);
+    }
+    let body = keys.length !== 0? data.details.results.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>) : []
+    let prevButton = data.details.previous? <button onClick={()=>categoryPage(data.details.previous)}>previous</button> : <div></div>
+    let nextButton = data.details.next? <button onClick={()=>categoryPage(data.details.next)}>next</button> : <div></div>
+        
+    console.log("keys",keys)
+    console.log("headers", headers)
+    console.log("body", body)
 
     return (
         <div>
-            <h3>Count: {data.details? data.details.count: null}</h3>
+            <h3>Count: {data.details.count}</h3>
             <div>{prevButton}{nextButton}</div>
             <table>
                 <thead>

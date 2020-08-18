@@ -1,22 +1,16 @@
 import React from 'react';
-import {NavLink} from "react-router-dom"
+import {Link} from "react-router-dom"
 import useStarWarsContext from '../context/useStarWarsContext'
 
-export default function CategoryList(props) {
-    const { data, setData, retrieveItems} = useStarWarsContext()
-    
-    if (!data.items) {
-        retrieveItems(props.url)
-    }
-    const list = data.items? 
-        Object.keys(data.items).map(r => 
-            <NavLink key={r} to={`/category/${r}`} className="myButton">
-                <button className="btn btn-dark" onClick={()=>setData({...data, url:props.url})}>{r}</button>
-            </NavLink>) 
-        : []
+export default function CategoryList() {
+    const { data } = useStarWarsContext()
+    //console.log("category List",data)
+
+    const list = Object.keys(data.categories).map(r => 
+        <Link key={r} to={`/category/${r}`} className="btn btn-dark myButton">{r}</Link>) 
 
     return (
-        list.length!==0 ? 
+        list.length !== 0 ? 
         <div>
             <nav className="navbar navbar-dark bg-dark">
                 {list}
