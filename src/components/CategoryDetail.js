@@ -2,31 +2,30 @@ import React from 'react';
 import useStarWarsContext from '../context/useStarWarsContext'
 
 export default function CategoryDetail({ name }) {
-    const { data, setData, retrieveDetails, categoryPage } = useStarWarsContext()
-    if (Object.keys(data.details).length === 0) {
+    const { data, retrieveDetails, categoryPage } = useStarWarsContext()
+    let count = null
+    let keys = []
+    let headers = []
+    let body = []
+    let prevButton = null
+    let nextButton = null
+    console.log("data.details",name, data.details[name])
+    if (data.details[name] === undefined) {
+        console.log("category detail, calling retrieve details")
         retrieveDetails(name)
     }
-    else if (name !== data.category) {
-        setData({...data, category: name, details: {}})
+    else {
+        count = data.details[name].count
+        keys = Object.keys(data.details[name].results[0])
+        headers = keys.map(k => <th>{k}</th>)
+        body = data.details[name].results.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>)
+        prevButton = data.details[name].previous? <button onClick={()=>categoryPage(name, data.details[name].previous)}>previous</button> : null
+        nextButton = data.details[name].next? <button onClick={()=>categoryPage(name, data.details[name].next)}>next</button> : null
     }
-    
-    let keys = Object.keys(data.details).length !==0? Object.keys(data.details.results[0]) : []
-    let headers = keys.map(k => <th>{k}</th>)
-    console.log("details",data.details)
-    if (keys.length !== 0) {
-        console.log("results",data.details.results);
-    }
-    let body = keys.length !== 0? data.details.results.map(d => <tr>{keys.map(k=><td>{d[k]}</td>)}</tr>) : []
-    let prevButton = data.details.previous? <button onClick={()=>categoryPage(data.details.previous)}>previous</button> : <div></div>
-    let nextButton = data.details.next? <button onClick={()=>categoryPage(data.details.next)}>next</button> : <div></div>
-        
-    console.log("keys",keys)
-    console.log("headers", headers)
-    console.log("body", body)
 
     return (
         <div>
-            <h3>Count: {data.details.count}</h3>
+            <h3>Count: {count}</h3>
             <div>{prevButton}{nextButton}</div>
             <table>
                 <thead>
